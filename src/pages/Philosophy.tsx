@@ -23,7 +23,7 @@ export default function Philosophy() {
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/5 rounded-full blur-3xl"></div>
               <img 
                 className="rounded-xl shadow-2xl relative z-10 w-full h-[400px] sm:h-[600px] object-cover" 
-                src="https://media.antigravity.dev/v1/media/06758652-9694-4d87-951e-6169543e33c2?file_type=image%2Fjpeg&file_name=input_file_0.png" 
+                src="https://unsplash.com/photos/shallow-focus-photo-of-woman-in-gray-jacket-0Zx1bDv5BNY?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink" 
                 alt="Tatiana Lopukhova"
                 referrerPolicy="no-referrer"
               />
