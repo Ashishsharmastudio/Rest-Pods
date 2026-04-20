@@ -23,7 +23,7 @@ export default function Philosophy() {
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/5 rounded-full blur-3xl"></div>
               <img 
                 className="rounded-xl shadow-2xl relative z-10 w-full h-[400px] sm:h-[600px] object-cover" 
-                src="https://unsplash.com/photos/shallow-focus-photo-of-woman-in-gray-jacket-0Zx1bDv5BNY?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink" 
+                src="https://picsum.photos/seed/tatiana-business/800/1200" 
                 alt="Tatiana Lopukhova"
                 referrerPolicy="no-referrer"
               />

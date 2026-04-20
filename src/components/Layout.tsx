@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ChatAssistant } from "./Chat/ChatInterface";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Philosophy", path: "/philosophy" },
     { name: "Benefits", path: "/benefits" },
     { name: "Launch Event", path: "/" },
     { name: "Corporate", path: "/corporate" },
+    { name: "Booking", path: "/booking" },
+    { name: "Admin", path: "/admin" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -34,7 +38,10 @@ export const Navbar = () => {
       </div>
 
       <div className="hidden md:block">
-        <button className="bg-primary text-white px-5 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95">
+        <button 
+          onClick={() => navigate("/booking")}
+          className="bg-primary text-white px-5 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95"
+        >
           Join Launch
         </button>
       </div>
@@ -61,7 +68,10 @@ export const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <button className="bg-primary text-white px-5 py-3 rounded-lg font-semibold w-full">
+          <button 
+            onClick={() => { navigate("/booking"); setIsOpen(false); }}
+            className="bg-primary text-white px-5 py-3 rounded-lg font-semibold w-full"
+          >
             Join Launch
           </button>
         </motion.div>
@@ -96,6 +106,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <main className="pt-16">
         {children}
       </main>
+      <ChatAssistant />
       <Footer />
     </div>
   );

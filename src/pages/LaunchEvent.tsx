@@ -48,8 +48,11 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4"
         >
-          <button className="bg-primary text-white px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 hover:opacity-95 transition-all shadow-xl shadow-primary/10">
-            Join Launch Event
+          <button 
+            onClick={() => window.location.href = "/booking"}
+            className="bg-primary text-white px-8 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 hover:opacity-95 transition-all shadow-xl shadow-primary/10"
+          >
+            Book Appointment
             <ArrowDown size={20} />
           </button>
         </motion.div>
@@ -59,7 +62,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-l from-transparent to-background z-10"></div>
         <img 
           className="w-full h-full object-cover" 
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl5w2W7WE0mvmvqEBU7XDnKRFeJA6qfUXdiS_d40PKkbB1F7e9ocZDdg2LOVmkQ1fSFniSpN0dzJ57GZOP_WDY9MpIAKd3Ng1-B3Oa6bvsu1xdJjImh0rS2c6wwKw7irGtsn_fEhxQL_xsCfNUqj1NtWQNp8QR3WGchVg4M6sg8J0ozQbhhagAsK1seFWXiM-4m0ZILFRbDYTnbTAX0QPMouBjDdUdzh-BqcmgTVIEGMfWSJXohS3oRqpLtpXSQcKZBMFKbOgdZ6nJ" 
+          src="https://picsum.photos/seed/reset-hero/1920/1080" 
           alt="Modern corporate office"
           referrerPolicy="no-referrer"
         />
@@ -217,7 +220,7 @@ const EventDetails = () => {
             <div className="relative overflow-hidden rounded-2xl border border-outline-variant/20 shadow-2xl bg-surface-container-low aspect-square sm:aspect-video lg:aspect-square">
               <img 
                 className="w-full h-full object-cover map-container" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH0Yt0T-wX6-wK6N0X-O7K3C9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9P9" 
+                src="https://picsum.photos/seed/brisbane80ann/1200/1200" 
                 alt="Event Location Map"
                 referrerPolicy="no-referrer"
               />
@@ -236,6 +239,33 @@ const EventDetails = () => {
   );
 };
 
+const TrustSignals = () => {
+  const testimonials = [
+    { name: "Senior Lead", company: "Tier-One Law Firm", text: "The 10-minute reset is the only intervention that actually clears the cognitive fog of a 12-hour day." },
+    { name: "Project Director", company: "Infrastructure Major", text: "Reset Pods™ have become our go-to tool for protecting team capacity during high-stakes delivery phases." },
+    { name: "Executive", company: "Financial Services", text: "It's clinical, efficient, and precise. No fluff, just functionality." }
+  ];
+
+  return (
+    <section className="py-24 px-6 md:px-16 bg-surface-container-lowest border-y border-outline-variant/10">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-xs font-black tracking-[0.2em] uppercase text-secondary mb-12 text-center">Operational Validation</h2>
+        <div className="grid md:grid-cols-3 gap-12">
+          {testimonials.map((t, i) => (
+            <div key={i} className="flex flex-col gap-6 p-8 rounded-3xl bg-surface-container-low border border-outline-variant/5">
+              <p className="text-lg font-light italic text-on-surface-variant leading-relaxed">"{t.text}"</p>
+              <div>
+                <p className="font-bold text-on-surface">{t.name}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">{t.company}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const FounderSnippet = () => {
   return (
     <section className="py-24 px-6 md:px-16 bg-surface">
@@ -243,7 +273,7 @@ const FounderSnippet = () => {
         <div className="w-full lg:w-1/3">
           <img 
             className="rounded-2xl shadow-xl w-full aspect-[4/5] object-cover" 
-            src="https://media.antigravity.dev/v1/media/06758652-9694-4d87-951e-6169543e33c2?file_type=image%2Fjpeg&file_name=input_file_0.png" 
+            src="https://picsum.photos/seed/tatiana-business/800/1200" 
             alt="Tatiana Lopukhova"
             referrerPolicy="no-referrer"
           />
@@ -276,6 +306,7 @@ export default function LaunchEvent() {
       <Hero />
       <Problem />
       <Protocol />
+      <TrustSignals />
       <FounderSnippet />
       <EventDetails />
     </motion.div>

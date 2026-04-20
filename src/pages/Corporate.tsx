@@ -46,7 +46,7 @@ export default function Corporate() {
           <div className="w-full lg:w-1/2">
             <img 
               className="rounded-2xl shadow-2xl w-full h-[400px] object-cover" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl5w2W7WE0mvmvqEBU7XDnKRFeJA6qfUXdiS_d40PKkbB1F7e9ocZDdg2LOVmkQ1fSFniSpN0dzJ57GZOP_WDY9MpIAKd3Ng1-B3Oa6bvsu1xdJjImh0rS2c6wwKw7irGtsn_fEhxQL_xsCfNUqj1NtWQNp8QR3WGchVg4M6sg8J0ozQbhhagAsK1seFWXiM-4m0ZILFRbDYTnbTAX0QPMouBjDdUdzh-BqcmgTVIEGMfWSJXohS3oRqpLtpXSQcKZBMFKbOgdZ6nJ" 
+              src="https://picsum.photos/seed/business-recovery/1200/800" 
               alt="Corporate environment"
               referrerPolicy="no-referrer"
             />
