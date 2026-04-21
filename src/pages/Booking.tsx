@@ -12,26 +12,40 @@ import {
   AlertCircle,
   Loader2,
   Zap,
-  ShieldAlert
+  ShieldAlert,
+  LogIn
 } from "lucide-react";
 import { SERVICES, BUSINESS_CONFIG } from "../constants";
+import { useAuth } from "../contexts/AuthContext";
 
 type Step = "service" | "selection" | "details" | "confirmation";
 
 export default function Booking() {
+  const { user, login: authLogin, isAuthenticated } = useAuth();
   const [step, setStep] = useState<Step>("service");
   const [selectedService, setSelectedService] = useState(SERVICES[0]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     phone: "",
     notes: ""
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name,
+        email: user.email
+      }));
+    }
+  }, [user]);
 
   const dates = [
     { date: "May 11", fullDate: "Monday, May 11, 2024", available: true },
@@ -287,6 +301,34 @@ export default function Booking() {
                   </div>
 
                   <form className="space-y-8" onSubmit={handleSubmit}>
+                    {!isAuthenticated && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-6 bg-primary/5 rounded-3xl border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <LogIn size={20} className="text-primary" />
+                          <div>
+                            <p className="text-sm font-bold text-on-surface">Member Management</p>
+                            <p className="text-[10px] text-on-surface-variant font-medium">Create an account to manage this and future sessions.</p>
+                          </div>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            if (formData.email && formData.name) {
+                              authLogin(formData.email, formData.name);
+                            } else {
+                              setError("Fill identification details first to sync account.");
+                            }
+                          }}
+                          className="px-4 py-2 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-primary/20"
+                        >
+                          Convert to Member
+                        </button>
+                      </motion.div>
+                    )}
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Professional Identity</label>
@@ -401,6 +443,12 @@ export default function Booking() {
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <button onClick={() => window.location.href = "/"} className="text-xs font-black uppercase tracking-widest text-primary hover:underline">Return to Operational Hub</button>
+                    {isAuthenticated && (
+                      <>
+                        <div className="hidden sm:block h-1 w-1 rounded-full bg-outline-variant/30" />
+                        <button onClick={() => window.location.href = "/dashboard"} className="text-xs font-black uppercase tracking-widest text-green-600 hover:underline">Manage Activity</button>
+                      </>
+                    )}
                     <div className="hidden sm:block h-1 w-1 rounded-full bg-outline-variant/30" />
                     <button className="text-xs font-black uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Download System Ticket (PDF)</button>
                   </div>

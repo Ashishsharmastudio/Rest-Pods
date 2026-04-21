@@ -30,7 +30,7 @@ export const ChatAssistant = () => {
     if (isOpen) scrollToBottom();
   }, [messages, isOpen]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage: Message = {
@@ -43,26 +43,34 @@ export const ChatAssistant = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Simulate AI response
-    setTimeout(() => {
-      let aiText = "I understand. Navigating complex corporate systems can be taxing. A 10-minute intervention at 80 Ann St could help clear that cognitive residue.";
-      
-      if (input.toLowerCase().includes("reschedule")) {
-        aiText = "Understood. I've initiated the rescheduling protocol for your appointment. Which day works better for your next reset?";
-      } else if (input.toLowerCase().includes("cancel")) {
-        aiText = "I've flagged your appointment for cancellation. Systems are being updated. Would you like to re-allocate this slot to a waitlisted colleague?";
-      } else if (input.toLowerCase().includes("book") || input.toLowerCase().includes("calendar")) {
-        aiText = "Accessing live availability... We have slots available tomorrow at 2:00 PM and 3:30 PM. Shall I provision one of these for you?";
-      }
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await response.json();
 
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: aiText,
+        content: data.response || "I encounter an operational error. Please verify system connection.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+    } catch (err) {
+      console.error("Chat Error:", err);
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "System link failure. Unable to reach recovery intelligence.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    }
   };
 
   return (

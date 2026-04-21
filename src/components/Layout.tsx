@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User as UserIcon, LogIn } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChatAssistant } from "./Chat/ChatInterface";
+import { useAuth } from "../contexts/AuthContext";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
   const navLinks = [
     { name: "Philosophy", path: "/philosophy" },
@@ -37,10 +39,27 @@ export const Navbar = () => {
         ))}
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden md:flex items-center gap-6">
+        {isAuthenticated ? (
+          <button 
+            onClick={() => navigate("/dashboard")}
+            className="flex items-center gap-3 text-sm font-bold text-on-surface hover:text-primary transition-colors"
+          >
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary uppercase">{user?.name[0]}</div>
+            {user?.name.split(' ')[0]}
+          </button>
+        ) : (
+          <button 
+            onClick={() => navigate("/booking")}
+            className="flex items-center gap-2 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors"
+          >
+            <LogIn size={18} />
+            Member Access
+          </button>
+        )}
         <button 
           onClick={() => navigate("/booking")}
-          className="bg-primary text-white px-5 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95"
+          className="bg-primary text-white px-5 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
         >
           Join Launch
         </button>
@@ -68,9 +87,30 @@ export const Navbar = () => {
               {link.name}
             </Link>
           ))}
+          <div className="h-px bg-outline-variant/10 my-2" />
+          {isAuthenticated ? (
+            <button 
+              onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
+              className="flex items-center gap-3 p-3 rounded-lg bg-surface border border-outline-variant/10"
+            >
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black uppercase">{user?.name[0]}</div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-on-surface">{user?.name}</p>
+                <p className="text-[10px] uppercase font-black text-on-surface-variant/40">Launch Member</p>
+              </div>
+            </button>
+          ) : (
+             <button 
+                onClick={() => { navigate("/booking"); setIsOpen(false); }}
+                className="flex items-center justify-center gap-2 p-3 text-sm font-bold text-on-surface-variant"
+              >
+                <LogIn size={18} />
+                Member Login
+              </button>
+          )}
           <button 
             onClick={() => { navigate("/booking"); setIsOpen(false); }}
-            className="bg-primary text-white px-5 py-3 rounded-lg font-semibold w-full"
+            className="bg-primary text-white px-5 py-3 rounded-lg font-semibold w-full shadow-lg shadow-primary/20"
           >
             Join Launch
           </button>
