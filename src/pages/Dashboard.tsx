@@ -18,7 +18,29 @@ import { MOCK_BOOKINGS } from "../constants";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
-  const [activeBookings, setActiveBookings] = useState(MOCK_BOOKINGS.filter(b => b.clientEmail === user?.email || b.clientEmail === "alex@arup.com")); // Demo filtering
+  const [activeBookings, setActiveBookings] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    if (!user) return;
+
+    const fetchBookings = async () => {
+      try {
+        console.log(`[Dashboard] Fetching operational activity for: ${user.email}`);
+        const response = await fetch('/api/bookings/me');
+        if (!response.ok) throw new Error('Failed to retrieve activity logs');
+        const data = await response.json();
+        console.log(`[Dashboard] Recovery history synchronized:`, data);
+        setActiveBookings(data);
+      } catch (err) {
+        console.error(`[Dashboard] Synchronization error:`, err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [user]);
 
   if (!user) {
     return (

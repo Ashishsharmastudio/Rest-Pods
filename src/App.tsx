@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import LaunchEvent from "./pages/LaunchEvent";
@@ -11,6 +12,11 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { AnimatePresence } from "motion/react";
 
 export default function App() {
+  React.useEffect(() => {
+    console.log(`[System] Reset Pods™ Recovery Engine Initialized.`);
+    console.log(`[System] Environment: ${process.env.NODE_ENV}`);
+  }, []);
+
   return (
     <AuthProvider>
       <Router>

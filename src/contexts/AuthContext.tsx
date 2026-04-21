@@ -22,12 +22,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const login = (email: string, name: string) => {
+    console.log(`[Identity] Initiating session for professional: ${email}`);
     const newUser: User = { name, email, role: email === "admin@reset.pods" ? "admin" : "user" };
     setUser(newUser);
     localStorage.setItem("reset_pods_user", JSON.stringify(newUser));
   };
 
   const logout = () => {
+    console.log(`[Identity] Terminating professional session: ${user?.email}`);
     setUser(null);
     localStorage.removeItem("reset_pods_user");
   };

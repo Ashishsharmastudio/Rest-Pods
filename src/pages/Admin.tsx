@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, 
@@ -21,14 +21,36 @@ import {
   Database,
   CloudLightning,
   Smartphone,
-  Globe
+  Globe,
+  Loader2
 } from "lucide-react";
-import { MOCK_BOOKINGS, SERVICES, BUSINESS_CONFIG } from "../constants";
+import { SERVICES, BUSINESS_CONFIG } from "../constants";
 
 type AdminTab = "overview" | "appointments" | "calendar" | "clients" | "messaging" | "automation" | "settings";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllBookings = async () => {
+      try {
+        console.log(`[Admin] Initiating global session telemetry sync...`);
+        const response = await fetch('/api/bookings');
+        if (!response.ok) throw new Error('Global sync failure');
+        const data = await response.json();
+        console.log(`[Admin] Global telemetry synchronized:`, data);
+        setBookings(data);
+      } catch (err) {
+        console.error(`[Admin] Telemetry error:`, err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllBookings();
+  }, []);
 
   const tabs = [
     { id: "overview", label: "Overview", icon: <LayoutDashboard size={18} /> },
@@ -72,10 +94,10 @@ export default function Admin() {
       <main className="flex-grow p-6 md:p-12 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
-            {activeTab === "overview" && <OverviewTab />}
-            {activeTab === "calendar" && <CalendarTab />}
-            {activeTab === "appointments" && <AppointmentsTab />}
-            {activeTab === "clients" && <ClientsTab />}
+            {activeTab === "overview" && <OverviewTab bookings={bookings} />}
+            {activeTab === "calendar" && <CalendarTab bookings={bookings} />}
+            {activeTab === "appointments" && <AppointmentsTab bookings={bookings} isLoading={isLoading} />}
+            {activeTab === "clients" && <ClientsTab bookings={bookings} />}
             {activeTab === "messaging" && <MessagingTab />}
             {activeTab === "automation" && <AutomationTab />}
             {activeTab === "settings" && <SettingsTab />}
@@ -86,9 +108,9 @@ export default function Admin() {
   );
 }
 
-const OverviewTab = () => {
+const OverviewTab = ({ bookings }: { bookings: any[] }) => {
   const stats = [
-    { label: "Daily Throughput", value: "48", icon: <Zap className="text-yellow-600" />, trend: "+8%" },
+    { label: "Total Recalibrations", value: bookings.length.toString(), icon: <Zap className="text-yellow-600" />, trend: "Real-time" },
     { label: "Active Professionals", value: "112", icon: <Users className="text-blue-600" />, trend: "+12%" },
     { label: "State Integrity", value: "99.8%", icon: <ShieldCheck className="text-green-600" />, trend: "Optimum" },
     { label: "Burnout Intercepts", value: "24", icon: <AlertTriangle className="text-orange-600" />, trend: "+5" },
@@ -155,7 +177,7 @@ const OverviewTab = () => {
   );
 };
 
-const CalendarTab = () => {
+const CalendarTab = ({ bookings }: { bookings: any[] }) => {
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const hours = Array.from({ length: 10 }, (_, i) => `${i + 8}:00`);
 
@@ -287,7 +309,7 @@ const MessagingTab = () => {
   );
 };
 
-const AppointmentsTab = () => {
+const AppointmentsTab = ({ bookings, isLoading }: { bookings: any[], isLoading: boolean }) => {
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -306,66 +328,87 @@ const AppointmentsTab = () => {
 
       <div className="bg-white rounded-3xl border border-outline-variant/10 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-surface/50 border-b border-outline-variant/10">
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Reference</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Client</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Service</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Time / Date</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Status</th>
-                <th className="px-8 py-5"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {MOCK_BOOKINGS.map((b) => (
-                <tr key={b.id} className="border-b border-outline-variant/5 hover:bg-surface transition-colors">
-                  <td className="px-8 py-6 font-mono text-xs font-bold text-secondary">{b.id}</td>
-                  <td className="px-8 py-6">
-                    <p className="font-bold text-on-surface">{b.clientName}</p>
-                    <p className="text-[10px] text-on-surface-variant font-medium">{b.clientEmail}</p>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className="text-xs font-bold text-on-surface-variant bg-surface px-2 py-1 rounded-md">{b.serviceName}</span>
-                  </td>
-                  <td className="px-8 py-6">
-                    <p className="text-sm font-bold text-on-surface">{b.time}</p>
-                    <p className="text-[10px] text-on-surface-variant uppercase font-black">{b.date}</p>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                      b.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
-                    }`}>
-                      {b.status}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <div className="flex justify-end gap-2">
-                       <button className="text-xs font-bold text-primary hover:bg-primary/5 px-3 py-1 rounded-lg">Reschedule</button>
-                       <button className="text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1 rounded-lg">Cancel</button>
-                       <button className="p-1 hover:bg-surface rounded-md"><MoreHorizontal size={18} /></button>
-                    </div>
-                  </td>
+          {isLoading ? (
+            <div className="p-20 flex flex-col items-center justify-center gap-4">
+              <Loader2 className="animate-spin text-primary" size={40} />
+              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Syncing global session matrix...</p>
+            </div>
+          ) : (
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-surface/50 border-b border-outline-variant/10">
+                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Reference</th>
+                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Client</th>
+                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Service</th>
+                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Time / Date</th>
+                  <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Status</th>
+                  <th className="px-8 py-5"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {bookings.length > 0 ? bookings.map((b) => (
+                  <tr key={b._id} className="border-b border-outline-variant/5 hover:bg-surface transition-colors">
+                    <td className="px-8 py-6 font-mono text-xs font-bold text-secondary uppercase">{b._id.slice(-6)}</td>
+                    <td className="px-8 py-6">
+                      <p className="font-bold text-on-surface">{b.professionalName}</p>
+                      <p className="text-[10px] text-on-surface-variant font-medium">{b.professionalEmail}</p>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="text-xs font-bold text-on-surface-variant bg-surface px-2 py-1 rounded-md">{b.serviceName}</span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <p className="text-sm font-bold text-on-surface">{b.time}</p>
+                      <p className="text-[10px] text-on-surface-variant uppercase font-black">{b.date}</p>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        b.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+                      }`}>
+                        {b.status}
+                      </span>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <div className="flex justify-end gap-2">
+                        <button className="text-xs font-bold text-primary hover:bg-primary/5 px-3 py-1 rounded-lg">Reschedule</button>
+                        <button className="text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1 rounded-lg">Cancel</button>
+                        <button className="p-1 hover:bg-surface rounded-md"><MoreHorizontal size={18} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan={6} className="p-20 text-center text-on-surface-variant/40 font-medium italic">
+                      Zero operational activity detected in database.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </motion.div>
   );
 };
 
-const ClientsTab = () => {
+const ClientsTab = ({ bookings }: { bookings: any[] }) => {
+  // Extract unique clients
+  const clients = Array.from(new Set(bookings.map(b => b.professionalEmail))).map(email => {
+    const booking = bookings.find(b => b.professionalEmail === email);
+    return {
+      name: booking.professionalName,
+      email: email,
+      company: "Corporate Recovery Partner", // Placeholder as company isn't in core schema yet
+      bookings: bookings.filter(b => b.professionalEmail === email).length,
+      points: Math.floor(Math.random() * 100) // Simulation
+    };
+  });
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <h3 className="text-2xl font-black tracking-tighter text-on-surface">Client Directory</h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { name: "Alexander Pierce", company: "Arup", email: "alex@arup.com", points: 120, bookings: 5 },
-          { name: "Sarah Jenkins", company: "Kinetic IT", email: "sarah@kinetic.it", points: 45, bookings: 2 },
-          { name: "Michael Chen", company: "Deloitte", email: "m.chen@deloitte.com", points: 0, bookings: 1 },
-        ].map((c, i) => (
+        {clients.length > 0 ? clients.map((c, i) => (
           <div key={i} className="bg-white p-8 rounded-3xl border border-outline-variant/10 shadow-sm flex flex-col gap-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center text-primary font-black uppercase">{c.name[0]}</div>
@@ -391,7 +434,11 @@ const ClientsTab = () => {
             </div>
             <button className="mt-2 w-full py-3 bg-surface rounded-xl text-xs font-bold hover:bg-surface-container-low transition-colors">View Profile</button>
           </div>
-        ))}
+        )) : (
+          <div className="lg:col-span-3 p-20 text-center text-on-surface-variant/40 font-medium italic border-2 border-dashed border-outline-variant/10 rounded-[2rem]">
+            Zero client records synchronized in current session.
+          </div>
+        )}
       </div>
     </motion.div>
   );

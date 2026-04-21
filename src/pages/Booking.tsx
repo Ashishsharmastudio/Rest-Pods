@@ -81,19 +81,40 @@ export default function Booking() {
     setIsLoading(true);
     setError(null);
 
-    // Simulate system delay and availability validation
-    setTimeout(() => {
-      if (!isTimeSlotAvailable(selectedTime!)) {
-        setError("This time slot was just reserved by another professional. Please select another time.");
-        setIsLoading(false);
-        setStep("selection");
-        return;
+    const bookingPayload = {
+      serviceId: selectedService.id,
+      serviceName: selectedService.name,
+      date: selectedDate,
+      time: selectedTime,
+      professionalName: formData.name,
+      professionalEmail: formData.email,
+      professionalPhone: formData.phone,
+      notes: formData.notes
+    };
+
+    try {
+      console.log(`[Booking] Transmitting allocation request:`, bookingPayload);
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingPayload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to synchronize with Central Command.');
       }
 
-      // Success logic
+      const data = await response.json();
+      console.log(`[Booking] Allocation confirmed:`, data);
       setIsLoading(false);
       setStep("confirmation");
-    }, 1500);
+    } catch (err) {
+      console.error(`[Booking] Transmission error:`, err);
+      setError("System link failure. Unable to finalize session allocation.");
+      setIsLoading(false);
+    }
   };
 
   return (

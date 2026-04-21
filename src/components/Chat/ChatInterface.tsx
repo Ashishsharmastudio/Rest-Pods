@@ -44,6 +44,7 @@ export const ChatAssistant = () => {
     setInput("");
 
     try {
+      console.log(`[Chat] Transmitting message: "${input}"`);
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -53,6 +54,7 @@ export const ChatAssistant = () => {
       });
 
       const data = await response.json();
+      console.log(`[Chat] Intelligence received:`, data);
 
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
