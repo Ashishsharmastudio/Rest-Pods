@@ -1,64 +1,89 @@
-# Reset Pods™ | Operational Recovery for High-Performers
+# 🧬 Reset Pods™ | The Recovery OS for High-Performers
 
-Reset Pods™ is a full-stack booking and resource management platform designed by **Corporate Recovery Co.** It provides high-performance professionals with a physical intervention for cognitive burnout, focusing on "Precision Resets" within corporate ecosystems.
+[![React](https://img.shields.io/badge/Frontend-React%2019-61DAFB?logo=react)](https://react.dev/)
+[![Tailwind](https://img.shields.io/badge/CSS-Tailwind%20v4-38B2AC?logo=tailwindcss)](https://tailwindcss.com/)
+[![Express](https://img.shields.io/badge/Backend-Express.js-000000?logo=express)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB%20Atlas-47A248?logo=mongodb)](https://www.mongodb.com/)
+[![AI](https://img.shields.io/badge/AI-Gemini%20RAG-4285F4?logo=google-gemini)](https://deepmind.google/technologies/gemini/)
 
-## 🚀 Vision
-Built for the 2–3 PM "corporate wall," Reset Pods™ treats workplace friction as a system failure rather than a personal failing. The platform manages the identification, allocation, and tracking of rapid recalibration sessions.
-
----
-
-## 🛠 Features
-
-### 1. Client-Facing Interface
-- **Launch Event Engine**: A high-fidelity landing page with Hero dynamics, operational validation, and event-specific logistics for the Brisbane 80 Ann St launch.
-- **Hybrid Booking Protocol**:
-    - **Guest Booking**: Rapid, no-login intake for immediate session allocation.
-    - **Member Upgrades**: Instant account conversion during intake to unlock persistent activity tracking.
-- **Service Selection**: Tiered recovery protocols (10-min Precision Reset vs. 45-min Operational Deep Dive).
-- **Dynamic Scheduler**: Real-time time slot selection with built-in conflict detection and system-wide buffer management.
-
-### 2. Operational Dashboard (User)
-- **Activity Mirror**: Real-time logs of all professional resets and system notifications.
-- **Session Management**: One-click rescheduling or cancellation of confirmed recovery slots.
-- **Loyalty Tracking**: Visual progression of "Loyalty Recalibration" points gained through consistent recovery.
-
-### 3. Admin Command Center
-- **System Overview**: High-level telemetry on daily throughput, state integrity, and active professional metrics.
-- **Calendar Matrix**: A visual 7-day grid displaying resource allocation across the entire pod network.
-- **Appointment Control**: Complete CRUD access to the booking database with status management (Confirmed, Pending, Cancelled).
-- **Client Directory**: Searchable professional database with individual history logs and company-specific data.
-- **Transmission Logs**: Unified messaging interface displaying assistant-to-client interactions and automated Twilio/Email alerts.
-
-### 4. System Settings & Logic
-- **Operational Rules**: Custom configuration for working hours, slot durations, and system-wide "rest intervals."
-- **Integration Stack**: Monitoring for third-party bridges (Twilio SMS, Google Calendar, PostgreSQL, and n8n Workflow Engine).
-
-### 5. Intelligent Assistant
-- **Persistent Chat Interface**: A specialized AI assistant available across the platform to answer "Philosophy" queries or initiate rapid rescheduling protocols.
+Reset Pods™ is a **Full-Stack Recovery Management System** designed by **Corporate Recovery Co.** It provides a professional ecosystem for high-performance individuals to initiate rapid "Precision Resets," treating workplace friction as a measurable system failure.
 
 ---
 
-## 🏗 Technology Stack
-- **Frontend**: React 19, TypeScript, Vite.
-- **Styling**: Tailwind CSS v4 (Modern SaaS UI recipe).
-- **Animations**: Motion (React-specific layout and state transitions).
-- **Icons**: Lucide React (Clinical/Specialist tool iconography).
-- **Auth**: Custom Simulated Auth Context (extensible to Firebase).
+## 🏗️ Core Architecture (MVC Protocol)
+The platform is built on a strict **Model-View-Controller** architecture to ensure operational integrity and scalability.
+
+-   **Models**: Specialized Mongoose schemas for `User` profiles and `Booking` allocations.
+-   **Views**: High-fidelity React components styled with Tailwind v4 for a clinical, SaaS-focused aesthetic.
+-   **Controllers**: Dedicated logic handlers for authentication, resource management, and AI intelligence.
 
 ---
 
-## 📁 Project Structure
-- `/src/pages`: Functional page components (Booking, Admin, Dashboards, etc.)
-- `/src/components`: Reusable UI modules (Layout, Chat, UI Cards)
-- `/src/contexts`: Global state management for Authentication and System Rules.
-- `/src/constants`: Simulation data and business rules.
+## ⚡ Key Feature Stack
+
+### 1. 🛡️ Identity & Auth (Google OAuth)
+Unified professional sign-on via Google. 
+- **Hybrid Entry**: Guests can book immediately, but can "Convert to Member" with one click to persist their recovery history.
+- **Role-Based Access**: Specialized views for standard **Professionals** and system **Administrators**.
+
+### 2. 🧠 Retrieval-Augmented Generation (RAG Chat)
+The intelligent **Reset Assistant** is powered by a high-precision AI pipeline:
+- **Google Gemini 3**: Generative intelligence for natural language interactions.
+- **Pinecone Vector DB**: Long-term operational memory for the assistant. 
+- **The Pipeline**: User Query → Gemini Embeddings → Pinecone Context Retrieval → Gemini Contextual Response.
+
+### 3. 📊 Operational Admin Center
+Global telemetry for the entire recovery network:
+- **Resource Matrix**: 7-day grid of pod allocations.
+- **Identity Logs**: Searchable professional directory with audit history.
+- **System Rules**: Direct control over operational hours, slot duration, and recalibration buffers.
+
+### 4. 📈 User Recovery Dashboard
+A personal control center for the modern professional to manage:
+- **Session Recalibration**: One-click rescheduling or cancellation.
+- **Activity Mirror**: Real-time log of recovery interventions.
+- **Performance Metrics**: Visual tracking of consistency-based rewards.
 
 ---
 
-## ⚡ Deployment & Build
-- **Port**: 3000
-- **Build**: `npm run build`
-- **Lint**: `npm run lint`
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React 19, TypeScript, Vite, Motion |
+| **Styling** | Tailwind CSS v4, Lucide Icons |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB Atlas (Mongoose) |
+| **Identity** | Passport.js (Google OAuth 2.0) |
+| **Intelligence** | Google Gemini (Embeddings + Flash) |
+| **Vector Search** | Pinecone Database |
 
 ---
-*© 2024 Corporate Recovery Co. Architectural rest for the modern professional.*
+
+## 🚀 Quick Setup Guide
+
+1.  **Clone the Recalibration Engine**:
+    ```bash
+    npm install
+    ```
+2.  **Environment Calibration**:
+    Create a `.env` file based on `.env.example` and provide your secrets (Google Cloud, MongoDB Atlas, Pinecone, Gemini).
+3.  **Initiate Dev Sequence**:
+    ```bash
+    npm run dev
+    ```
+4.  **Seed Intelligence** (Optional):
+    Ingest the knowledge base into your Pinecone index:
+    ```bash
+    npx tsx backend/scripts/seedKnowledgeBase.ts
+    ```
+
+---
+
+## 📁 System Topology
+-   `/backend`: MVC-compliant controllers, routes, and models.
+-   `/src`: Atomic UI components, functional pages, and global contexts.
+-   `/server.ts`: Unified full-stack entry point (Express + Vite Middleware).
+
+---
+*© 2026 Corporate Recovery Co. Architectural rest for the high-performance professional.*

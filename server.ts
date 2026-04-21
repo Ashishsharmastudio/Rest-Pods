@@ -29,7 +29,14 @@ async function startServer() {
     connectTimeoutMS: 10000,
   })
     .then(() => console.log("Connected to MongoDB established."))
-    .catch((err) => console.error("MongoDB connection error:", err));
+    .catch((err) => {
+      if (err.name === 'MongooseServerSelectionError') {
+        console.error("❌ MONGODB ATLAS CONNECTIVITY ERROR:");
+        console.error("Your IP address is likely blocked. PLEASE GO TO MONGODB ATLAS > NETWORK ACCESS AND ADD '0.0.0.0/0' TO THE WHITELIST.");
+      } else {
+        console.error("MongoDB connection error:", err);
+      }
+    });
 
   // Middleware
   app.use(cors());
